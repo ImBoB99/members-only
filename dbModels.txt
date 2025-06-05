@@ -1,0 +1,48 @@
+DB Name = top_members_only
+
+*NOTE can create indexes on username and user_id columns to make db faster
+
+TABLES
+
+# users
+id (PK)
+first_name [not null, not empty string, not numbers, not symbols]
+last_name [not null, not empty string, not numbers, not symbols]
+username (UNIQUE EMAIL) [not null, not empty string]
+password (bcrypt hash) [not null]
+membership_status (BOOL, default false)
+admin (BOOL, default false)
+
+# posts
+id (PK)
+title [not null, not empty string]
+created_on (NOW())
+text  [not null]
+user_id (FK → users.id) [number]
+
+CREATE DATABASE top_members_only;
+
+* login into the db
+\c top_members_only
+
+CREATE TABLE users (
+  id INTEGER PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
+  first_name VARCHAR(255) NOT NULL CHECK (TRIM(first_name) <> '' AND first_name ~ '^[A-Za-z]+$'),
+  last_name VARCHAR(255) NOT NULL CHECK (TRIM(first_name) <> '' AND first_name ~ '^[A-Za-z]+$'),
+  username VARCHAR(255) UNIQUE NOT NULL CHECK (TRIM(username) <> '' AND username ~* '^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$'),
+  password VARCHAR(255) NOT NULL,
+  membership_status BOOLEAN NOT NULL DEFAULT FALSE,
+  admin BOOLEAN NOT NULL DEFAULT FALSE
+);
+
+CREATE TABLE posts (
+  id INTEGER PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
+  title VARCHAR(255) NOT NULL CHECK (TRIM(title) <> ''),
+  created_on TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  text TEXT NOT NULL,
+  user_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE
+);
+
+// Initialize the session table in db manually by running: psql your_db_name < node_modules/connect-pg-simple/table.sql
+
+
