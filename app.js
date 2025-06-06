@@ -1,15 +1,20 @@
 const express = require("express");
-require('dotenv').config();
-const { pool } = require("./db/pool")
+require("dotenv").config();
+const { pool } = require("./db/pool");
 const path = require("node:path");
-const indexRouter = require('./routes/indexRouter')
+const indexRouter = require("./routes/indexRouter");
+const userRouter = require("./routes/userRouter");
 
 const app = express();
 
-app.set('views', path.join(__dirname, "views"));
-app.set('view engine', 'ejs')
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
-app.use('/', indexRouter)
+app.set("views", path.join(__dirname, "views"));
+app.set("view engine", "ejs");
+
+app.use("/", indexRouter);
+app.use("/", userRouter);
 
 const PORT = process.env.APP_PORT;
 app.listen(PORT, async () => {
@@ -17,8 +22,8 @@ app.listen(PORT, async () => {
 
   try {
     const res = await pool.query("SELECT NOW()");
-    console.log("Connected to the database", res.rows[0])
+    console.log("Connected to the database", res.rows[0]);
   } catch (error) {
-    console.log(error)
+    console.log(error);
   }
 });
