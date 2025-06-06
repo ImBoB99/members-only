@@ -7,4 +7,9 @@ const addUserToDb = async (firstName, lastName, username, password, admin = fals
   );
 };
 
-module.exports = { addUserToDb }
+const findUserByEmail = async (username) => {
+  const result = await pool.query("SELECT * FROM users WHERE username = $1", [username]);
+  return result.rows;
+};
+
+module.exports = { addUserToDb, findUserByEmail };
