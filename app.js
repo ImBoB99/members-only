@@ -1,9 +1,10 @@
 const express = require("express");
 require("dotenv").config();
-const { pool } = require("./db/pool");
+const { pool } = require("./config/pool");
 const path = require("node:path");
 const indexRouter = require("./routes/indexRouter");
 const userRouter = require("./routes/userRouter");
+const { notFoundHandler, globalErrorHandler } = require('./middleware/errorHandler');
 
 const app = express();
 
@@ -15,6 +16,9 @@ app.set("view engine", "ejs");
 
 app.use("/", indexRouter);
 app.use("/", userRouter);
+
+app.use(notFoundHandler);
+app.use(globalErrorHandler);
 
 const PORT = process.env.APP_PORT;
 app.listen(PORT, async () => {
