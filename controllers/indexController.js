@@ -1,5 +1,9 @@
+const {getAllMessages} = require("../db/queries/userQueries")
+
 const getRoot = async (req, res,) => {
-  res.render("index");
+  const messages = await getAllMessages()
+  console.log(messages)
+  res.render("index", {messages: messages});
 }
 
 module.exports = {getRoot}

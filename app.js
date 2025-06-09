@@ -33,6 +33,7 @@ app.use(passport.session());
 // globally set the currentUser variable so every ejs view has access
 app.use((req, res, next) => {
   res.locals.currentUser = req.user;
+  console.log(res.locals)
   next();
 });
 

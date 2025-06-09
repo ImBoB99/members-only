@@ -1,7 +1,7 @@
 const db = require("../db/queries/userQueries");
 const { validationResult } = require("express-validator");
 const bcrypt = require("bcrypt");
-require('dotenv').config();
+require("dotenv").config();
 
 const getSignup = (req, res) => {
   res.render("signup");
@@ -22,7 +22,6 @@ const getNewMessage = (req, res) => {
 const postSignup = async (req, res) => {
   console.log("User posting signup");
 
-
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
     // Handle errors - send back to client or re-render view
@@ -33,7 +32,7 @@ const postSignup = async (req, res) => {
   const isAdmin = req.body.admin === "true" ? true : false;
 
   try {
-    const hashedPasword = await bcrypt.hash(password, 10)
+    const hashedPasword = await bcrypt.hash(password, 10);
     await db.addUserToDb(firstName, lastName, email, hashedPasword, isAdmin);
   } catch (error) {
     console.error(error);
@@ -46,7 +45,6 @@ const postJoinTheClub = async (req, res, next) => {
   const userId = req.user.id;
 
   if (clubSecret !== process.env.CLUB_SECRET) {
-    
     return res.status(403).send("Invalid club secret");
   }
 
@@ -54,19 +52,40 @@ const postJoinTheClub = async (req, res, next) => {
     await db.addUserToClub(userId);
     return res.redirect("/");
   } catch (err) {
-    
     console.error("DB error in addUserToClub:", err);
     return next(err);
   }
 };
 
 const postNewMessage = async (req, res) => {
-  console.log("Posting Message")
-  console.log(req.body)
-  //TODO:
+  console.log("Posting Message");
+  console.log(req.body);
+  //TODO: post messages, display messages on index, admin delete messages
 
-  res.redirect("/")
-}
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    // Handle errors - send back to client or re-render view
+    return res.status(400).json({ errors: errors.array() });
+  }
 
+  const { title, text, id } = req.body;
 
-module.exports = { getSignup, postSignup, getLogin, getJoinTheClub, postJoinTheClub, getNewMessage, postNewMessage };
+  try {
+    await db.postUserMessage(title, text, id);
+    console.log(`Posted a message by user id: ${id}, title: ${title}, message text: ${text}`)
+  } catch (error) {
+    console.error(error);
+  }
+
+  res.redirect("/");
+};
+
+module.exports = {
+  getSignup,
+  postSignup,
+  getLogin,
+  getJoinTheClub,
+  postJoinTheClub,
+  getNewMessage,
+  postNewMessage,
+};

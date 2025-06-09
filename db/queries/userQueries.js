@@ -16,4 +16,13 @@ const addUserToClub = async (userId) => {
   await pool.query("UPDATE users SET membership_status = true WHERE id = $1", [userId])
 }
 
-module.exports = { addUserToDb, findUserByEmail, addUserToClub };
+const postUserMessage = async (title, text, userId) => {
+  await pool.query("INSERT INTO posts (title, text, user_id) VALUES ($1, $2, $3)", [title, text, userId])
+}
+
+const getAllMessages = async () => {
+  const {rows} = await pool.query("SELECT title, created_on, text, user_id, username FROM posts INNER JOIN users ON posts.user_id = users.id");
+  return rows;
+}
+
+module.exports = { addUserToDb, findUserByEmail, addUserToClub, postUserMessage, getAllMessages };

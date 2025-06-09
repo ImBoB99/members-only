@@ -12,6 +12,15 @@
     <a href="/join-the-club">Join the Club</a>
     <% if (currentUser) { %>
     <a href="/new-message">New Message</a>
-    <%}%>
+    <%}%> <% if (messages) { %>
+    <h1>Messages</h1>
+
+    <%messages.forEach(message => {%>
+    <h2>Title: <%= message.title %></h2>
+    <p>Message: <%= message.text %></p>
+    <% if (currentUser && currentUser.membership_status === true) { %>
+    <p>Written By: <%= message.username %></p>
+    <p>Written On: <%= message.created_on %></p>
+    <% }%> <% })%> <%} %>
   </body>
 </html>
