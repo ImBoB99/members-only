@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Join the Club</title>
+  </head>
+  <body>
+    <% if (locals.currentUser) {%> <% if (currentUser.membership_status === true) { %>
+
+    <h1>You are a club member!</h1>
+    <a href="/">Go Home</a>
+    <%} else {%>
+    <h1>Join the Club <%= currentUser.username %></h1>
+
+    <form action="/join-the-club" method="POST" style="display: inline">
+      <input type="text" name="clubSecret" id="clubSecret" placeholder="Club Secret" />
+      <button type="submit">Submit</button>
+    </form>
+    <%} %> <% } else { %>
+    <h1>You have to log in first.</h1>
+    <a href="/login">Login</a>
+    <%}%>
+  </body>
+</html>

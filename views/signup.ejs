@@ -6,6 +6,10 @@
     <title>User Signup</title>
   </head>
   <body>
+    <% if (currentUser) { %>
+    <h2>You are already logged in!</h2>
+    <a href="/">Go back to homepage</a>
+    <% } else { %>
     <h1>User Signup Page</h1>
 
     <form
@@ -29,6 +33,13 @@
         placeholder="Your Password"
         autocomplete="off"
       />
+      <input
+        type="password"
+        name="confirmPassword"
+        id="confirmPassword"
+        placeholder="Confirm Your Password"
+        autocomplete="off"
+      />
       <div>
         <label for="admin">Admin?</label>
         <input type="checkbox" name="admin" id="admin" value="true" />
@@ -37,5 +48,7 @@
     </form>
 
     <a href="/">Go back to homepage</a>
+    <a href="/login">Go Login</a>
+    <% } %>
   </body>
 </html>

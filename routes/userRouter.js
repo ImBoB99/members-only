@@ -24,4 +24,7 @@ userRouter.post("/logout", (req, res, next) => {
   })
 })
 
+userRouter.get("/join-the-club", userController.getJoinTheClub);
+userRouter.post("/join-the-club", userController.postJoinTheClub);
+
 module.exports = userRouter;

@@ -37,6 +37,8 @@ const validateUsername = [
       if (existingUser.length > 0) {
         throw new Error("A user with this e-mail already exists.");
       }
+
+      return true;
     }),
 ];
 
@@ -45,11 +47,24 @@ const validatePassword = [
   // can enforce additional password constraints
 ];
 
+const validateConfirmPassword = [
+  body("confirmPassword").custom((value, { req }) => {
+
+    const passwordsMatch = value === req.body.password;
+    if (!passwordsMatch) {
+      throw new Error("Passwords do not match")
+    }
+
+    return true;
+  }),
+];
+
 const signupValidation = [
   ...validateFirstName,
   ...validateLastName,
   ...validateUsername,
   ...validatePassword,
+  ...validateConfirmPassword
 ];
 
 module.exports = {

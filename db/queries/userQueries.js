@@ -12,4 +12,8 @@ const findUserByEmail = async (username) => {
   return result.rows;
 };
 
-module.exports = { addUserToDb, findUserByEmail };
+const addUserToClub = async (userId) => {
+  await pool.query("UPDATE users SET membership_status = true WHERE id = $1", [userId])
+}
+
+module.exports = { addUserToDb, findUserByEmail, addUserToClub };
