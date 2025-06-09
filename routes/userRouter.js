@@ -3,6 +3,7 @@ const userRouter = Router();
 const userController = require("../controllers/userController");
 const { signupValidation } = require("../middleware/userSignupValidation");
 const passport = require("passport")
+const { isAuth } = require("../middleware/authMiddleware")
 
 userRouter.get("/signup", userController.getSignup);
 userRouter.post("/signup", signupValidation, userController.postSignup);
@@ -26,5 +27,8 @@ userRouter.post("/logout", (req, res, next) => {
 
 userRouter.get("/join-the-club", userController.getJoinTheClub);
 userRouter.post("/join-the-club", userController.postJoinTheClub);
+
+userRouter.get("/new-message", isAuth, userController.getNewMessage);
+userRouter.post("/new-message", isAuth, userController.postNewMessage);
 
 module.exports = userRouter;

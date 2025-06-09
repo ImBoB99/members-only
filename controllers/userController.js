@@ -15,6 +15,10 @@ const getJoinTheClub = (req, res) => {
   res.render("join-the-club");
 };
 
+const getNewMessage = (req, res) => {
+  res.render("new-message");
+};
+
 const postSignup = async (req, res) => {
   console.log("User posting signup");
 
@@ -56,5 +60,13 @@ const postJoinTheClub = async (req, res, next) => {
   }
 };
 
+const postNewMessage = async (req, res) => {
+  console.log("Posting Message")
+  console.log(req.body)
+  //TODO:
 
-module.exports = { getSignup, postSignup, getLogin, getJoinTheClub, postJoinTheClub };
+  res.redirect("/")
+}
+
+
+module.exports = { getSignup, postSignup, getLogin, getJoinTheClub, postJoinTheClub, getNewMessage, postNewMessage };
