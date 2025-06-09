@@ -59,8 +59,6 @@ const postJoinTheClub = async (req, res, next) => {
 
 const postNewMessage = async (req, res) => {
   console.log("Posting Message");
-  console.log(req.body);
-  //TODO: post messages, display messages on index, admin delete messages
 
   const errors = validationResult(req);
   if (!errors.isEmpty()) {

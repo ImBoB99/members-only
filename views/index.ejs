@@ -12,15 +12,52 @@
     <a href="/join-the-club">Join the Club</a>
     <% if (currentUser) { %>
     <a href="/new-message">New Message</a>
-    <%}%> <% if (messages) { %>
+    <% } %> <% if (messages) { %>
     <h1>Messages</h1>
 
-    <%messages.forEach(message => {%>
-    <h2>Title: <%= message.title %></h2>
-    <p>Message: <%= message.text %></p>
-    <% if (currentUser && currentUser.membership_status === true) { %>
-    <p>Written By: <%= message.username %></p>
-    <p>Written On: <%= message.created_on %></p>
-    <% }%> <% })%> <%} %>
+    <% messages.forEach(message => { %>
+    <div class="message">
+      <h2>Title: <%= message.title %></h2>
+      <p>Message: <%= message.text %></p>
+
+      <% if (currentUser && (currentUser.membership_status === true || currentUser.admin === true))
+      { %>
+      <p>Written By: <%= message.username %></p>
+      <p>Written On: <%= message.created_on %></p>
+
+      <% if (currentUser.admin === true) { %>
+      <button class="delete-message" data-id="<%= message.id %>">Delete</button>
+      <% } %> <% } %> <% }) %> <% } %>
+    </div>
   </body>
+
+  <script>
+    const deleteMessageBtns = document.querySelectorAll(".delete-message");
+
+    deleteMessageBtns.forEach((button) => {
+      button.addEventListener("click", () => {
+        deleteMessage(button.dataset.id);
+      });
+    });
+
+    async function deleteMessage(id) {
+      try {
+        const response = await fetch("/delete-message", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ id: id }),
+        });
+
+        if (response.ok) {
+          window.location.reload();
+        } else {
+          console.error("Failed to delete message");
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    }
+  </script>
 </html>

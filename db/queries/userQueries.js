@@ -21,8 +21,12 @@ const postUserMessage = async (title, text, userId) => {
 }
 
 const getAllMessages = async () => {
-  const {rows} = await pool.query("SELECT title, created_on, text, user_id, username FROM posts INNER JOIN users ON posts.user_id = users.id");
+  const {rows} = await pool.query("SELECT posts.id, title, created_on, text, user_id, username FROM posts INNER JOIN users ON posts.user_id = users.id");
   return rows;
 }
 
-module.exports = { addUserToDb, findUserByEmail, addUserToClub, postUserMessage, getAllMessages };
+const deleteMessageById = async (id) => {
+  await pool.query("DELETE FROM posts WHERE id = $1", [id]);
+}
+
+module.exports = { addUserToDb, findUserByEmail, addUserToClub, postUserMessage, getAllMessages, deleteMessageById };
